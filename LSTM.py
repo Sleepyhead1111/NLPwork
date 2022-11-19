@@ -90,7 +90,7 @@ class LSTM_one(nn.Module):
         h = h_0    # 隐藏状态初始化
         for x in X:
             # 拼接形成[ h[t-1], x[t] ]
-            catenate = torch.cat([h, x], dim=1)    #dim=1表示按行拼接,catenate: [batch_size, n_hidden+emb_size]
+            catenate = torch.cat([h, x], dim=1)    # dim=1表示按行拼接,catenate: [batch_size, n_hidden+emb_size]
             # 遗忘门计算
             f = self.sigmoid(self.W_f(catenate))
             # 输入门计算
@@ -145,7 +145,7 @@ class LSTM_double(nn.Module):
         h2 = h2_0    # 第二层隐藏状态初始化
         for x in X:
             # 第一层拼接形成[ h[t-1], x[t] ]
-            catenate1 = torch.cat([h1, x], dim=1)    #dim=1表示按行拼接,catenate1: [batch_size, n_hidden+emb_size]
+            catenate1 = torch.cat([h1, x], dim=1)    # dim=1表示按行拼接,catenate1: [batch_size, n_hidden+emb_size]
             # 第一层遗忘门计算
             f1 = self.sigmoid(self.W1_f(catenate1))
             # 第一层输入门计算
@@ -157,7 +157,7 @@ class LSTM_double(nn.Module):
             o1 = self.sigmoid(self.W1_o(catenate1))
             h1 = torch.mul(o1, self.tanh(c1))
             # 第二层拼接
-            catenate2 = torch.cat([h2, h1], dim=1)  # dim=1表示按行拼接,catenate: [batch_size, n_hidden+emb_size]
+            catenate2 = torch.cat([h2, h1], dim=1)  # dim=1表示按行拼接,catenate2: [batch_size, n_hidden+n_hidden]
             # 第二层遗忘门计算
             f2 = self.sigmoid(self.W2_f(catenate2))
             # 第二层输入门计算
@@ -220,7 +220,10 @@ def train_LSTM():
                 total_loss += valid_loss.item()
                 count_loss += 1
           
-            print(f'Valid {total_valid} samples after epoch:', '%04d' % (epoch + 1), 'lost =',
+            # print(f'Valid {total_valid} samples after epoch:', '%04d' % (epoch + 1), 'lost =',
+            #       '{:.6f}'.format(total_loss / count_loss),
+            #       'ppl =', '{:.6}'.format(math.exp(total_loss / count_loss)))
+            print(f'epoch:', '%04d' % (epoch + 1), 'lost =',
                   '{:.6f}'.format(total_loss / count_loss),
                   'ppl =', '{:.6}'.format(math.exp(total_loss / count_loss)))
 
